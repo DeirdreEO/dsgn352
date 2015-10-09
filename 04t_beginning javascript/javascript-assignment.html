@@ -9,11 +9,11 @@ X 01) Using Javascript's document.write() method, add a paragraph of lorem ipsum
 X 02) Define a variable and give it a value of 'today'. Write the value of the variable on the line that says "<h2>Get involved</h2>" so that it reads "Get involved today" in a web browser.
 X 03) On the line that says "Brackets has many users!", replace "many" (just delete the word) with a JavaScript snippet that multiples 10,000 by 10,000 and divides the sum by 5 and outputs the result.
 X 04) Create an array of seven pieces of fruit, then print the second and fifth pieces of fruit anywhere in the body of the document.
-05) Replace the contents of the <h3> tags with a function which takes one argument: the text to go into the <h3> tags. The function must also print the <h3> tags.
-06) In the same function as #5, use a method from the string object to convert the text passed into the function to uppercase.
+X 05) Replace the contents of the <h3> tags with a function which takes one argument: the text to go into the <h3> tags. The function must also print the <h3> tags.
+X 06) In the same function as #5, use a method from the string object to convert the text passed into the function to uppercase.
 X (needs work) 07) Output the width and height of the browser window anywhere in the body of the document, labeling the dimensions accordingly. For example, "width: 1204, height: 952".
 X 08) Create a link that, when clicked, opens an alert dialogue box with the URL of the current webpage.
-X (needs work) 09) Reusing code from exercise #4, create a function to output a random piece of fruit from the fruit array. This function must live in an external file. Hint: use the Math object.
+X (fixed) 09) Reusing code from exercise #4, create a function to output a random piece of fruit from the fruit array. This function must live in an external file. Hint: use the Math object.
 
 OBJECTIVE
 The purpose of this assignment is for students to practice working with several JavaScript language constructs: statements, variables, arrays, functions, and objects. In addition, students will gain a greater understanding of properties, methods, and global objects.
@@ -38,11 +38,18 @@ If you have any questions, please send Saul a message through Slack (http://baiz
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>GETTING STARTED WITH BRACKETS</title>
         <meta name="description" content="An interactive getting started guide for Brackets.">
+        <script>
+            function printh3 (titles_h3){
+              document.write("<h3>" +  titles_h3.toUpperCase() + "</h3>");
+
+            }
+        </script>
     </head>
     <body>
 
       <script>
-        var date='today';
+        // var date='today';
+        // printh3 ("function output #1");
       </script>
 
       <script>
@@ -64,12 +71,12 @@ If you have any questions, please send Saul a message through Slack (http://baiz
       first_fruit = fruit[1];
       second_fruit = fruit[4];
 
-      document.getFruitByID("second_print").innerHTML = fruit[4]; //why doesn't this work? (tried removed document.print once it didn't appear)
+      // document.getFruitByID("second_print").innerHTML = fruit[4]; //why doesn't this work? (tried removed document.print once it didn't appear)
       </script>
 
       <script>
-      function h3_text(text_index) {  //not working... why either blank or undefined...
-      var text = [
+
+      var titles = [
         "Projects in Brackets", //0
         "Quick Edit for CSS and JavaScript", //1
         "Preview HTML and CSS changes live in the browser", //2
@@ -77,12 +84,14 @@ If you have any questions, please send Saul a message through Slack (http://baiz
         "Quick View", //4
         "Need something else? Try an extension!", //5
         ];
-        return toUpperCase(text);
-        }
+
+      //  var h3_content=function h3_text(titles) {
+      //     return toUpperCase(titles);
+      //   }
       </script>
 
       <script>
-        function randomFruit(fruit_index) {
+        function randomFruit() {
         var fruit = [
           "kiwi", //0
           "cantaloupe", //1
@@ -92,7 +101,9 @@ If you have any questions, please send Saul a message through Slack (http://baiz
           "papaya", //5
           "plum", //6
           ];
-        return fruit[Math.floor(Math.random()*11)];
+        var random_index = Math.floor(Math.random()* (fruit.length))
+          console.log("fruit index: " + random_index)
+        return fruit[random_index];
         }
       </script>
 
@@ -132,14 +143,17 @@ If you have any questions, please send Saul a message through Slack (http://baiz
             GET STARTED WITH YOUR OWN FILES
         -->
 
-        <h3> <script>document.write(h3_text(text));</script></h3>
+        <!-- <h3> <script>document.write(h3_content(0));</script></h3> -->
 
         <p>
             In order to edit your own code using Brackets, you can just open the folder containing your files.
             Brackets treats the currently open folder as a "project"; features like Code Hints, Live Preview and
             Quick Edit only use files within the currently open folder.
         </p>
-
+        <script>
+          var date='today';
+          // printh3 ("function output #2");
+        </script>
         <samp>
             Once you're ready to get out of this sample project and edit your own code, you can use the dropdown
             in the left sidebar to switch folders. Right now, the dropdown says "Getting Started" - that's the
@@ -152,7 +166,7 @@ If you have any questions, please send Saul a message through Slack (http://baiz
         <!--
             THE RELATIONSHIP BETWEEN HTML, CSS AND JAVASCRIPT
         -->
-        <h3>Quick Edit for CSS and JavaScript</h3>
+        <script> printh3 ("Quick Edit for CSS and JavaScript");</script>
         <p>
             No more switching between documents and losing your context. When editing HTML, use the
             <kbd>Cmd/Ctrl + E</kbd> shortcut to open a quick inline editor that displays all the related CSS.
@@ -185,7 +199,7 @@ If you have any questions, please send Saul a message through Slack (http://baiz
         <!--
             LIVE PREVIEW
         -->
-        <h3>Preview HTML and CSS changes live in the browser</h3>
+        <script> printh3 ("Preview HTML and CSS changes live in the browser");</script>
         <p>
             You know that "save/reload dance" we've been doing for years? The one where you make changes in
             your editor, hit save, switch to the browser and then refresh to finally see the result?
@@ -197,8 +211,7 @@ If you have any questions, please send Saul a message through Slack (http://baiz
             there is no need to copy and paste the final code back into the editor. Your code runs in the
             browser, but lives in your editor!
         </p>
-
-        <h3>Live Highlight HTML elements and CSS rules</h3>
+        <script> printh3 ("Live Highlight HTML elements and CSS rules");</script>
         <p>
             Brackets makes it easy to see how your changes in HTML and CSS will affect the page. When your cursor
             is on a CSS rule, Brackets will highlight all affected elements in the browser. Similarly, when editing
@@ -224,8 +237,7 @@ If you have any questions, please send Saul a message through Slack (http://baiz
             support for JavaScript. Live previews are also only possible with Google Chrome, but we hope
             to bring this functionality to all major browsers in the future.
         </p>
-
-        <h3 id="qv">Quick View</h3>
+        <script id="qv"> printh3 ("Quick View");</script>
         <p>
             For those of us who haven't yet memorized the color equivalents for HEX or RGB values, Brackets makes
             it quick and easy to see exactly what color is being used. In either CSS or HTML, simply hover over any
@@ -254,7 +266,7 @@ If you have any questions, please send Saul a message through Slack (http://baiz
           </script>
         </div>
 
-        <h3 id="extension">Need something else? Try an extension!</h3>
+        <script id="extension"> printh3 ("Need something else? Try an extension!");</script>
         <p>
             In addition to all the goodness that's built into Brackets, our large and growing community of
             extension developers has built hundreds of extensions that add useful functionality. If there's
@@ -293,13 +305,13 @@ If you have any questions, please send Saul a message through Slack (http://baiz
 
         <div>
           <script>
-            document.write(randomFruit(fruit));
+            document.write(randomFruit());
           </script>
         </div>
 
         <div>
           <script>
-            document.write("Width:" + width + "Height:" + height);
+            document.write("Width: " + width + ", Height: "  + height);
           </script>
         </div>
 
