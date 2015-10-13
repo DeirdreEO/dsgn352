@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>d3lightful assignment</title>
+        <script type="text/javascript" src="d3-master/d3.js"> </script>
+       <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script> -->
+    </head>
+
+    <body>
+        <script type="text/javascript">
+        // console.log(d3.js.length: 'd3.js is null or undefined');
+
+          var dataset; //Declare global var
+
+          d3.csv("Popular indicators_Data.csv", function(error, data) {
+              if (error) {
+                console.log(error);
+              }
+              else {
+              console.log(data);
+
+              dataset = data;
+            }
+          });
+              //csv becomes global var, and is accessible later
+            // dataset=data;
+        // });
+
+          //  d3.select("body")
+            //  .append("p")
+            //  .text("This is a sentence inside a paragraph tag that has been dynamically added to the page via d3.");
+
+              d3.select("body").selectAll("p")
+                     .data(dataset)
+                     .text("I'm in this loop")
+                     .enter()
+                     .append("p")
+                     .text(function(d) { return d; });
+
+
+                      // .style("color", function(d) {
+                        // if (d > 60) {
+                          // return "red"; }
+                          // else {
+                            // return "black"; }
+                          // });
+        </script>
+    </body>
+</html>
