@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>d3lightful assignment</title>
-        <script type="text/javascript" src="d3-master/d3.js"> </script>
+        <script type="text/javascript" src="d3.js"> </script>
        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script> -->
     </head>
 
@@ -15,36 +15,22 @@
 
           d3.csv("Popular indicators_Data.csv", function(error, data) {
               if (error) {
-                console.log(error);
+               console.log("error");
               }
               else {
-              console.log(data);
-
-              dataset = data;
-            }
+                console.log(data);
+                dataset = data;    //csv becomes global var, and is accessible later
+              d3.select("body")
+                .selectAll("p") //  d3.select("body")
+                .data(dataset)
+                .enter()
+                .append("p")
+                .text( function( d ) {
+                          return "n: " + d.n + "Series Code: " + d["Series Code"] + "Country Name: " + d["Country Name"] + "Country Code: " + d[Country Code] + "YR 2000: " + d.2000YR + "YR 2001: " + d.2001YR + "YR 2002: " + d.2002YR + "YR 2003: " + d.2003YR + "YR 2004: " + d.2004YR + "YR 2005: " + d.2005YR + "YR 2006: " + d.2006YR + "YR 2007: " + d.2007YR + "YR 2008: " + d.2008YR + "YR 2009: " + d.2009YR + "YR 2010: " + d.2010YR + "YR 2011: " + d.2011YR + "YR 2012: " + d.2012YR;
+                          });
+                    }
           });
-              //csv becomes global var, and is accessible later
-            // dataset=data;
-        // });
 
-          //  d3.select("body")
-            //  .append("p")
-            //  .text("This is a sentence inside a paragraph tag that has been dynamically added to the page via d3.");
-
-              d3.select("body").selectAll("p")
-                     .data(dataset)
-                     .text("I'm in this loop")
-                     .enter()
-                     .append("p")
-                     .text(function(d) { return d; });
-
-
-                      // .style("color", function(d) {
-                        // if (d > 60) {
-                          // return "red"; }
-                          // else {
-                            // return "black"; }
-                          // });
         </script>
     </body>
 </html>
