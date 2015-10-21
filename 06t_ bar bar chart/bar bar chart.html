@@ -42,30 +42,30 @@
     </style>
 </head>
 <body>
-  <h1>Boston Bar Ratings</h1>
+
 
   <script type="text/javascript">
 
+        var margin = {top: 10, right: 10, bottom: 10, left: 10},
+            padding = {top: 30, right: 30, botton:30, left: 30},
+            outerWidth = 960,
+            outerHeight = 500,
+            innerWidth = outerWidth - margin.right - margin.left,
+            innerHeight = outerHeight -margin.top - margin.bottom,
+            width = innerWidth - padding.right - padding.left,
+            height = innerHeight - padding.top - padding.bottom;
 
-        var w = 800;
-        var h = 50;
-        var barPadding = 1;
+        var barPadding = 7;
 
         var dataset;
 
-        //Create scale functions
-        // var xScale = d3.scale.ordinal()
-        //            .domain([0, d3.max(dataset, function(d) { return d[0]; })])
-        //            .range([padding, w - padding * 2]);
-        //
-        // var yScale = d3.scale.linear()
-        //            .domain([0, d3.max(dataset, function(d) { return d[1]; })])
-        //            .range([h - padding, padding]);
-
         var svg = d3.select ("body")
           .append ("svg")
-          .attr ("width", w)
-          .attr ("height", h);
+          .attr ("width", width + margin.left + margin.right)
+          .attr ("height", height + margin.top + margin.bottom)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
         d3.csv ( "bar_bar_chart.csv", function ( error, data ) {
 
@@ -77,6 +77,8 @@
                 // Assign the local variable 'data', which holds our CSV file info, to the global variable 'dataset'.
                 dataset = data ;
 
+                var bar_magnification = 50;
+
                 d3
                   .select ("svg")
                   .selectAll("rect")
@@ -84,26 +86,23 @@
           			  .enter()
           			  .append("rect")
                   .attr("x", function(d, i) {
-                    return i * (w / dataset.length);
+                    return i * (width / dataset.length);
                   })
                   .attr("y", function(d) {
-                    return h - d.Rating * 10;
+                    return height - d.Rating * bar_magnification;
                   }) //Height minus data value
-                  .attr("width", w / dataset.length - barPadding)
-                  .attr("height", function(d) {return d.Rating * 10;
+                  .attr("bar_width", width / dataset.length - barPadding)
+                  .attr("bar_height", function(d) {return d.Rating * bar_magnification;
                   })
                   // .attr("class", "bar")
                   .attr("fill", function (d) {
-                    if(d.City = "Boston" ) {
+                    if(d.City == "Boston" ) {
                       return "blue";}
-                    else {
+                    if(d. City == "Somerville") {
                       return "orange";}
+                    if(d. City == "Cambridge") {
+                      return "gray";}
                     })
-
-                    // if(d.City = "Somerville") {
-                    //   return "orange"; };
-                    // if(d.City = "Cambridge") {
-                    //   return "gray"; };
                     };
 
                   d3
@@ -117,104 +116,18 @@
           			   })
                    .attr("text-anchor", "middle")
           			   .attr("x", function(d, i) {
-          			   		return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+          			   		return i * (width / dataset.length) + (width / dataset.length - barPadding) / 2;
           			   })
           			   .attr("y", function(d) {
-          			   		return h - (d.Rating * 10) + .5;
+          			   		return height - (d.Rating * 10) + .5;
           			   })
           			   .attr("font-family", "sans-serif")
-          			   .attr("font-size", "5px")
+          			   .attr("font-size", "10px")
           			   .attr("fill", "black");
                   //  .attr("transform", "rotate(-90)");
 
                });
 
-               //Define X axis
-         			var xAxis = d3.svg.axis()
-         							  .scale(xScale)
-         							  .orient("bottom")
-         							  .ticks(5)
-         							  .tickFormat(formatAsPercentage);
-
-         			//Define Y axis
-         			var yAxis = d3.svg.axis()
-         							  .scale(yScale)
-         							  .orient("left")
-         							  .ticks(5)
-         							  .tickFormat(formatAsPercentage);
-
-               //Create X axis
-         			svg.append("g")
-         				.attr("class", "axis")
-         				.attr("transform", "translate(0," + (h - barPadding) + ")")
-         				.call(xAxis);
-
-         			//Create Y axis
-         			svg.append("g")
-         				.attr("class", "axis")
-         				.attr("transform", "translate(" + barPadding + ",0)")
-         				.call(yAxis);
-
-//     var margin = {top: 20, right: 20, bottom: 30, left: 40},
-//     width = 960 - margin.left - margin.right,
-//     height = 500 - margin.top - margin.bottom;
-//
-// var x = d3.scale.ordinal()
-//     .rangeRoundBands([0, width], .1);
-//
-// var y = d3.scale.linear()
-//     .range([height, 0]);
-//
-// var xAxis = d3.svg.axis()
-//     .scale(x)
-//     .orient("bottom");
-//
-// var yAxis = d3.svg.axis()
-//     .scale(y)
-//     .orient("left")
-//     .ticks(10, "%");
-//
-// var svg = d3.select("body").append("svg")
-//     .attr("width", width + margin.left + margin.right)
-//     .attr("height", height + margin.top + margin.bottom)
-//   .append("g")
-//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-//
-// d3.tsv("bar_bar_chart.csv", type, function(error, data) {
-//   if (error) throw error;
-//
-//   x.domain(data.map(function(d) { return d.Name; }));
-//   y.domain([0, d3.max(data, function(d) { return d.Rating; })]);
-//
-//   svg.append("g")
-//       .attr("class", "x axis")
-//       .attr("transform", "translate(0," + height + ")")
-//       .call(xAxis);
-//
-//   svg.append("g")
-//       .attr("class", "y axis")
-//       .call(yAxis)
-//     .append("text")
-//       .attr("transform", "rotate(-90)")
-//       .attr("y", 6)
-//       .attr("dy", ".71em")
-//       .style("text-anchor", "end")
-//       .text("Rating");
-//
-//   svg.selectAll(".bar")
-//       .data(data)
-//     .enter().append("rect")
-//       .attr("class", "bar")
-//       .attr("x", function(d) { return x(d.Name); })
-//       .attr("width", x.rangeBand())
-//       .attr("y", function(d) { return y(d.Rating); })
-//       .attr("height", function(d) { return height - y(d.Rating); });
-// });
-//
-// function type(d) {
-//   d.Rating = +d.Rating;
-//   return d;
-// }
   </script>
 </body>
 </html>
