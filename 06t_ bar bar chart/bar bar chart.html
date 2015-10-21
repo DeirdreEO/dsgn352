@@ -1,10 +1,23 @@
+<!--
+
+#TODO: change the colors of the bars based on the neighborhood
+#TODO: horizontally center the svg
+TODO: increase the scale of the entire piece
+TODO: move the bar labels next to the bars
+TODO: rotate the labels 90 degrees (counter-clockwise)
+TODO: create a margin; some labels are falling off the page
+TODO: add the axes and their labels
+
+-->
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>assignment 06t_bar bar chart</title>
     <script type="text/javascript" src="d3.js"> </script>
-    <style type="css">
+    <style type="text/css">
     /*.axis path,
     .axis line {
       fill: none;
@@ -39,6 +52,12 @@
 .x.axis path {
   display: none;
 }
+
+        .canvas {
+            display: block ;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
@@ -47,25 +66,17 @@
   <script type="text/javascript">
 
 
-        var w = 800;
-        var h = 50;
+        var svg_width = 800;
+        var svg_height = 200;
         var barPadding = 1;
 
         var dataset;
 
-        //Create scale functions
-        // var xScale = d3.scale.ordinal()
-        //            .domain([0, d3.max(dataset, function(d) { return d[0]; })])
-        //            .range([padding, w - padding * 2]);
-        //
-        // var yScale = d3.scale.linear()
-        //            .domain([0, d3.max(dataset, function(d) { return d[1]; })])
-        //            .range([h - padding, padding]);
-
         var svg = d3.select ("body")
           .append ("svg")
-          .attr ("width", w)
-          .attr ("height", h);
+                .attr("class","canvas")
+                .attr ("width", svg_width)
+                .attr ("height", svg_height);
 
         d3.csv ( "bar_bar_chart.csv", function ( error, data ) {
 
@@ -77,6 +88,10 @@
                 // Assign the local variable 'data', which holds our CSV file info, to the global variable 'dataset'.
                 dataset = data ;
 
+                // tweak the scale here. woohoo!
+                var bar_scale = 40 ;
+
+
                 d3
                   .select ("svg")
                   .selectAll("rect")
@@ -84,26 +99,23 @@
           			  .enter()
           			  .append("rect")
                   .attr("x", function(d, i) {
-                    return i * (w / dataset.length);
+                    return i * (svg_width / dataset.length);
                   })
                   .attr("y", function(d) {
-                    return h - d.Rating * 10;
+                    return svg_height - (d.Rating * bar_scale);
                   }) //Height minus data value
-                  .attr("width", w / dataset.length - barPadding)
-                  .attr("height", function(d) {return d.Rating * 10;
+                  .attr("width", svg_width / dataset.length - barPadding)
+                  .attr("height", function(d) {
+                            return d.Rating * bar_scale ;
                   })
                   // .attr("class", "bar")
                   .attr("fill", function (d) {
-                    if(d.City = "Boston" ) {
+                    if ( d.City == "Boston" ) {
                       return "blue";}
                     else {
                       return "orange";}
                     })
 
-                    // if(d.City = "Somerville") {
-                    //   return "orange"; };
-                    // if(d.City = "Cambridge") {
-                    //   return "gray"; };
                     };
 
                   d3
@@ -117,10 +129,10 @@
           			   })
                    .attr("text-anchor", "middle")
           			   .attr("x", function(d, i) {
-          			   		return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+          			   		return i * (svg_width / dataset.length) + (svg_width / dataset.length - barPadding) / 2;
           			   })
           			   .attr("y", function(d) {
-          			   		return h - (d.Rating * 10) + .5;
+          			   		return svg_height - (d.Rating * 10) + .5;
           			   })
           			   .attr("font-family", "sans-serif")
           			   .attr("font-size", "5px")
@@ -146,7 +158,7 @@
                //Create X axis
          			svg.append("g")
          				.attr("class", "axis")
-         				.attr("transform", "translate(0," + (h - barPadding) + ")")
+         				.attr("transform", "translate(0," + (svg_height - barPadding) + ")")
          				.call(xAxis);
 
          			//Create Y axis
