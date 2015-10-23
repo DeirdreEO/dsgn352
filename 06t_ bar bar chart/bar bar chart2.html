@@ -4,107 +4,164 @@
     <meta charset="utf-8">
     <title>assignment 06t_bar bar chart</title>
     <script type="text/javascript" src="d3.js"> </script>
-    <style type="css">
-
+    <style type="text/css">
+      .canvas{
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px;
+      }
     </style>
 </head>
 <body>
 
   <script type="text/javascript">
 
-  var height = 400,
-      width = 960;
+        var width = 1000;
+        var height = 400;
+        var barPadding = 10;
 
-  var barPadding = 7;
+        var margin= 20;
 
-  var dataset;
 
-  var svg = d3.select ("body")
-    .append ("svg")
-    .attr ("class", "canvas")
-    .attr ("width", width)
-    .attr ("height", height)
-  .append("g");
-    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var dataset;
 
-  svg.append ("text")
-    .attr("fill", "DarkCyan")
-    .attr("x", 500)
-    .attr("y", 25)
-    .attr("dx", "10px")
-    .attr("dy", ".75em")
-    .attr("text-anchor", "middle")
-    .style("text-decoration", "underline")
-    .attr("class", "shadow")
-    .text("Boston Bar Yelp Ratings Chart");
+        var bar_magnification = 25;
 
-  d3.csv ( "bar_bar_chart.csv", function ( error, data ) {
+        //Create scale functions
+        // var xScale = d3.scale.ordinal()
+        //            .domain([0, d3.max(dataset, function(d) { return d[0]; })])
+        //            .range([padding, w - padding * 2]);
+        //
+        // var yScale = d3.scale.linear()
+        //            .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+        //            .range([h - padding, padding]);
 
-      if ( error ) {
-          // This displays an error message in console if the data fails to load.
-          console.log ( "There was an error accessing your dataset." ) ;}
-          else {
+        var svg = d3.select ("body")
+          .append ("svg")
+          .attr("class", "canvas")
+          .attr ("width", width)
+          .attr ("height", height)
+          // .append ("g")
+          .attr("transform", "translate(" + margin + "," + margin + ")");
 
-          // Assign the local variable 'data', which holds our CSV file info, to the global variable 'dataset'.
-          dataset = data ;
+        svg
+          .append ("rect")
+          .attr ("x", 0)
+          .attr ("y", 0)
+          .attr ("fill", "red")
+          .attr ("height", 40)
+          .attr ("width", 40);
 
-          var bar_magnification = 50;
 
-          d3
-            .select ("svg")
-            .selectAll("rect")
-            .data(dataset)
-            .enter()
-            .append("rect")
-            .attr("x", function(d, i) {
-              return i * (width / dataset.length);
-            })
-            .attr("y", function(d) {
-              return height -  d.Rating * bar_magnification;
-            }) //Height minus data value
-            .attr("bar_width", width / dataset.length - barPadding)
-            .attr("bar_height", function(d) {return d.Rating * bar_magnification;
-            })
-            // .attr("class", "bar")
-            .attr("fill", function (d) {
-              if(d.City == "Boston" ) {
-                return "CornflowerBlue";}
-              if(d. City == "Somerville") {
-                return "DarkCyan";}
-              if(d. City == "Cambridge") {
-                return "SeaGreen";}
-              })
-              };
 
-            d3
-              .select("svg")
-              .append ("g")
-              .attr("transform", "translate(0," + height +")")
-              // .call(xAxis)
-              .selectAll("text")
-             .data(dataset)
-             .enter()
-             .append("text")
-             .text(function(d) {
-                return d.Name;
-             })
-             .attr("text-anchor", "middle")
-             .attr("x", function(d, i) {
-                return i * (width / dataset.length) + (width / dataset.length - barPadding) / 2;
-             })
-             .attr("y", function(d) {
-                return height;
-             })
-             .style ("text-anchor", "end")
-            //  .attr("dx", "-.8em")
-            //  .attr("dy", ".15em")
-            //  .attr("transform", "rotate(-90)")
-             .attr("font-family", "sans-serif")
-             .attr("font-size", "10px")
-             .attr("fill", "black");
-
-         });
-
+        //   svg.append ("text")
+        //     .attr("fill", "DarkCyan")
+        //     .attr("x", width / 2)
+        //     .attr("y", 25)
+        //     .attr("dx", "10px")
+        //     .attr("dy", ".75em")
+        //     .attr("text-anchor", "middle")
+        //     .style("text-decoration", "underline")
+        //     .attr("class", "shadow")
+        //     .text("Boston Bar Yelp Ratings Chart");
+        //
+        // d3.csv ( "bar_bar_chart.csv", function ( error, data ) {
+        //
+        //     if ( error ) {
+        //         // This displays an error message in console if the data fails to load.
+        //         console.log ( "There was an error accessing your dataset." ) ;}
+        //         else {
+        //
+        //         // Assign the local variable 'data', which holds our CSV file info, to the global variable 'dataset'.
+        //         dataset = data ;
+        //
+        //         d3
+        //           .select ("svg")
+        //           .selectAll("rect")
+        //   			  .data(dataset)
+        //   			  .enter()
+        //   			  .append("rect")
+        //           .attr("x", function(d, i) {
+        //             return i * (width / dataset.length);
+        //           })
+        //           .attr("y", function(d) {
+        //             return height - d.Rating * bar_magnification;
+        //           }) //Height minus data value
+        //           .attr("width", width / dataset.length - barPadding)
+        //           .attr("height", function(d) {return d.Rating * bar_magnification;
+        //           })
+        //           // .attr("class", "bar")
+        //           .attr("fill", function (d) {
+        //             if(d.City == "Boston" ) {
+        //               return "DarkCyan";}
+        //             if(d.City == "Cambridge") {
+        //               return "Cornflowerblue";}
+        //             if(d.City == "Somerville") {
+        //               return "Coral";}
+        //             })
+        //
+        //             // if(d.City = "Somerville") {
+        //             //   return "orange"; };
+        //             // if(d.City = "Cambridge") {
+        //             //   return "gray"; };
+        //             };
+        //
+        //           d3
+        //             .select("svg")
+        //             .append ("g")
+        //             .attr("transform", "translate(0," + height +")")
+        //             .selectAll("text")
+        //   			   .data(dataset)
+        //   			   .enter()
+        //   			   .append("text")
+        //   			   .text(function(d) {
+        //   			   		return d.Name;
+        //   			   })
+        //            .attr("text-anchor", "middle")
+        //   			   .attr("x", function(d, i) {
+        //   			   		return i * (width / dataset.length) + (width / dataset.length - barPadding) / 2;
+        //   			   })
+        //   			   .attr("y", function(d) {
+        //   			   		return height;
+        //   			   })
+        //            .style ("text-anchor", "end")
+        //            .attr("dx", "-.8em")
+        //            .attr("dy", ".15em")
+        //            .attr("transform", "rotate(-90)")
+        //   			   .attr("font-family", "sans-serif")
+        //   			   .attr("font-size", "8px")
+        //   			   .attr("fill", "black");
+        //           //  .attr("transform", "rotate(-90)");
+        //
+        //        });
+        //
+        //        //Define X axis
+        //  			var xAxis = d3.svg.axis()
+        //  							  .scale(xScale)
+        //  							  .orient("bottom")
+        //  							  .ticks(5)
+        //  							  .tickFormat(formatAsPercentage);
+        //
+        //  			//Define Y axis
+        //  			var yAxis = d3.svg.axis()
+        //  							  .scale(yScale)
+        //  							  .orient("left")
+        //  							  .ticks(5)
+        //  							  .tickFormat(formatAsPercentage);
+        //
+        //        //Create X axis
+        //  			svg.append("g")
+        //  				.attr("class", "axis")
+        //  				.attr("transform", "translate(0," + (h - barPadding) + ")")
+        //  				.call(xAxis);
+        //
+        //  			//Create Y axis
+        //  			svg.append("g")
+        //  				.attr("class", "axis")
+        //  				.attr("transform", "translate(" + barPadding + ",0)")
+        //  				.call(yAxis);
+        //
 
   </script>
 </body>
