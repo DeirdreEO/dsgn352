@@ -60,17 +60,17 @@
 
 
 
-        //   svg.append ("text")
-        //     .attr("fill", "DarkCyan")
-        //     .attr("x", width / 2)
-        //     .attr("y", 25)
-        //     .attr("dx", "10px")
-        //     .attr("dy", ".75em")
-        //     .attr("text-anchor", "middle")
-        //     .style("text-decoration", "underline")
-        //     .attr("class", "shadow")
-        //     .text("Boston Bar Yelp Ratings Chart");
-        //
+          svg.append ("text")
+            .attr("fill", "DarkCyan")
+            .attr("x", width / 2)
+            .attr("y", 25)
+            .attr("dx", "10px")
+            .attr("dy", ".75em")
+            .attr("text-anchor", "middle")
+            .style("text-decoration", "underline")
+            .attr("class", "shadow")
+            .text("Boston Bar Yelp Ratings Chart");
+
         d3.csv ( "bar_bar_chart.csv", function ( error, data ) {
 
             if ( error ) {
@@ -87,7 +87,7 @@
                 numbers.shift();
                 // numbers.push(numbers.length);
                 var xScale = d3.scale.ordinal()
-                    .domain(numbers)
+                    .domain(["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x", "y", "z", "a1", "b1", "c1"])
                     .rangeRoundBands([0, width], 0.05);
 
 
