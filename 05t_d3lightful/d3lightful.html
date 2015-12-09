@@ -25,7 +25,11 @@
                 .enter()
                 .append("p")
                 .text( function( d ) {
-                          return " Year: " + d.Year + " Ethnicity: " + d.Ethnicity + " Sex: " + d.Sex + " Cause of Death: " + d['Cause of Death'] + " Count" + d.Count + " Percent" + d.Percent
+                          if ( d.Sex == 'FEMALE' ) {
+                              return " Year: " + d.Year + " Ethnicity: " + d.Ethnicity + " Sex: " + d.Sex + " Cause of Death: " + d['Cause of Death'] + " Count" + d.Count + " Percent" + d.Percent
+
+
+                          }
                           });
                     }
           });
