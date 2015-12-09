@@ -7,17 +7,20 @@
     </head>
 
     <body>
+    <p id="sex">only show males</p>
+
         <script type="text/javascript">
         // console.log(d3.js.length: 'd3.js is null or undefined');
 
           var dataset; //Declare global var
+            var filters = new Array () ;
 
           d3.csv("nyc_morbidity_data.csv", function(error, data) {
               if (error) {
-               console.log("error");
+//               console.log("error");
               }
               else {
-                console.log(data);
+//                console.log(data);
                 dataset = data;    //csv becomes global var, and is accessible later
               d3.select("body")
                 .selectAll("p") //  d3.select("body")
@@ -25,14 +28,57 @@
                 .enter()
                 .append("p")
                 .text( function( d ) {
-                          if ( d.Sex == 'FEMALE' ) {
+//                          if ( d.Sex == 'FEMALE' ) {
                               return " Year: " + d.Year + " Ethnicity: " + d.Ethnicity + " Sex: " + d.Sex + " Cause of Death: " + d['Cause of Death'] + " Count" + d.Count + " Percent" + d.Percent
 
 
-                          }
+//                          }
                           });
                     }
           });
+
+
+//        function filter ( attribute ) {
+//            filters[filters.length] = attribute ;
+//        }
+
+//        function filter ( key, value ) {
+//            filters[key] = value ;
+//        }
+
+//        filter ( 'Year', '2010' ) ;
+//
+//        console.log ( "filters: " + filters['Year'] ) ;
+//
+//        filter ( 'Sex', 'MALE' ) ;
+//
+//        console.log ( "filters:" + filters['Sex'] ) ;
+//
+//        filter ( 'Ethnicity', 'HISPANIC' ) ;
+//
+//        console.log ( "filters:" + filters['Ethnicity'] ) ;
+//
+
+
+
+
+            d3.select( '#sex')
+                    .on("click", function () {
+                        console.log ( "clicked #sex element" ) ;
+
+                        d3.select("body")
+                                .selectAll("p") //  d3.select("body")
+                                .data(dataset)
+                                .enter()
+                                .text( function( d ) {
+                                     if ( d.Sex == 'MALE' ) {
+                                      return " Year: " + d.Year + " Ethnicity: " + d.Ethnicity + " Sex: " + d.Sex + " Cause of Death: " + d['Cause of Death'] + " Count" + d.Count + " Percent" + d.Percent
+                                    }
+                                }) ;
+
+                    });
+
+
         </script>
     </body>
 </html>
