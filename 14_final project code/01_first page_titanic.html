@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Titanic project first page</title>
+    <link rel="stylesheet" type="text/css" href="reset.css"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Gentium+Book+Basic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Gravitas+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Abril+Fatface' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="finalproject_titanic.css"/>
+  	<meta name="data visualization project" content="Titanic passenger list investigation">
+    <script type="text/javascript" src="d3.js"> </script>
+</head>
+<body>
+  <section>
+    <header>
+      <p id="project_title"> sample title</p>
+    </header>
+    <navigation>
+      <a href="01_first page_titanic.html"><img src="icons/nav1_passengers.png" alt="Passenger demographics"></a>
+  		<a href="02_second page_titanic.html"><img src="icons/nav2_journeymap.png" alt="Journies map"></a>
+  		<a href="03_third page_titanic.html"><img src="icons/nav3_lifeboats.png" alt="Life boat map"></a>
+    </navigation>
+  </section>
+
+  <section>
+    <heading 1>
+    </heading 1>
+    <p>
+      expository filler text
+    </p>
+  </section>
+
+  <section>
+    <script type="text/javascript">
+
+      // global variables
+        var width = 1000 ;
+        var height = 400 ;
+        var barPadding = 10 ;
+        var margin = 20 ;
+        var dataset ;
+        var bar_magnification = 25 ;
+        var bar_baseline_y_offset = 190 ; // A number to calculate the baseline of the bars.
+        var filters = new Array;
+
+      // create the top-level svg
+        var svg = d3.select("body")
+          .append("svg")
+          .attr("class", "canvas")
+          .attr ("width", width)
+          .attr ("height", height);
+          // .append ("g")
+          // .attr("transform", "translate(" + margin + "," + margin + ")");
+
+      // add a title for the chart
+          svg.append ("text")
+            .attr("fill", "DarkCyan")
+            .attr("x", width / 2)
+            .attr("y", 25)
+            .attr("dx", "10px")
+            .attr("dy", ".75em")
+//            .attr("dx", "10px")
+//            .attr("dy", ".75em") // What are these for? The above two lines already position the element in the horizontal center, and if it needs to by moved down, the y attribute can be increased.
+            .attr("text-anchor", "middle")
+            .style("text-decoration", "underline")
+            .attr("text-decoration", "underline") // Consider using a CSS class instead of so many inline styles / attributes
+            .attr("class", "shadow")
+            .text("Boston Bar Yelp Ratings Chart");
+
+//@@ -75,142 +68,93 @@ //what does this meeeeean?
+
+d3.csv ( "titanic3_workingfile2.csv", function ( error, data ) {
+
+            if ( error ) {
+                // This displays an error message in console if the data fails to load.
+                else {
+                console.log ( "There was an error accessing your dataset." ) ;
+            }
+            else {
+
+                // Assign the local variable 'data', which holds our CSV file info, to the global variable 'dataset'.
+                dataset = data ;
+
+                function filter ( attribute ) {
+//            filters[filters.length] = attribute ;
+//        }
+
+//        function filter ( key, value ) {
+//            filters[key] = value ;
+//        }
+
+//        filter ( 'Year', '2010' ) ;
+//
+//        console.log ( "filters: " + filters['Year'] ) ;
+//
+//        filter ( 'Sex', 'MALE' ) ;
+//
+//        console.log ( "filters:" + filters['Sex'] ) ;
+//
+//        filter ( 'Ethnicity', 'HISPANIC' ) ;
+//
+//        console.log ( "filters:" + filters['Ethnicity'] ) ;
+//
+
+
+                var filter_survived = [(d.survived == 0).length, (d.survived == 1).length];
+
+                var filter_gender = [(d.gender == "female").length, (d.gender == "male").length];
+
+                var filter_class = [(d.pclass == 1).length, (d.pclass == 2).length, d.pclass == 3.length];
+
+                var filter_age = [(d.age > 0 && d.age <= 10).length, (d.age > 10 && d.age <= 20).length, (d.age > 20 && d.age <= 30).length, (d.age > 30 && d.age <= 40).length, (d.age > 40 && d.age <= 100).length];
+
+                var filter_suvived_gender = [(d.gender == "female" && d.survived == 0 ).length, (d.gender == "female" && d.survived == 1).length, (d.gender == "male" d.survived == 0).length, (d.gender == "male" && d.survived == 1).length];
+
+                var filter_survived_class = [(d.pclass == 1 && d.survived == 0).length, (d.pclass == 1 && d.survived == 1).length, (d.pclass == 2 && d.survived == 0).length, (d.pclass == 2 && d.survived == 1).length, (d.pclass == 3 && d.survived == 0).length, (d.pclass == 3 && d.survived == 1).length];
+
+                var filter_survived_age = [(d.age > 0 && d.age <= 10 && d.survived == 0).length, ((d.age > 0 && d.age <= 10 && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.survived == 1).length];
+
+                var filter_gender_class = [(d.gender == "female" && d.pclass == 1).length, (d.gender == "female" && d.pclass == 2).length, (d.gender == "female" && d.pclass == 3).length, (d.gender == "male" && d.pclass == 1).length, (d.gender == "male" && d.pclass == 2).length, (d.gender == "male" && d.pclass == 3).length];
+
+                var filter_gender_age = [(d.age > 0 && d.age <= 10 && d.gender == "female").length, (d.age > 0 && d.age <= 10 && d.gender == "male").length, (d.age > 10 && d.age <= 20 && d.gender == "female").length, (d.age > 10 && d.age <= 20 && d.gender == "male").length, (d.age > 20 && d.age <= 30 && d.gender == "female").length, (d.age > 20 && d.age <= 30 && d.gender == "male").length, (d.age > 30 && d.age <= 40 && d.gender == "female").length, (d.age > 30 && d.age <= 40 && d.gender == "male").length, (d.age > 40 && d.age <= 100 && d.gender == "female").length, (d.age > 40 && d.age <= 100 && d.gender == "male").length];
+
+                var filter_class_age = [(d.age > 0 && d.age <= 10 && d.pclass == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 2).length, (d.age > 0 && d.age <= 10 && d.pclass == 3).length, (d.age > 10 && d.age <= 20 && d.pclass == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 2).length, (d.age > 10 && d.age <= 20 && d.pclass == 3).length, (d.age > 20 && d.age <= 30 && d.pclass == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 2).length, (d.age > 20 && d.age <= 30 && d.pclass == 3).length, (d.age > 30 && d.age <= 40 && d.pclass == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 2).length, (d.age > 30 && d.age <= 40 && d.pclass == 3).length, (d.age > 40 && d.age <= 100 && d.pclass == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 2).length, (d.age > 40 && d.age <= 100 && d.pclass == 3).length];
+
+                var filter_survived_gender_class = [(d.gender == "female" && d.pclass == 1 && d.survived == 0).length, (d.gender == "female" && d.pclass == 1 && d.survived == 1).length, (d.gender == "female" && d.pclass == 2 && d.survived == 0).length, (d.gender == "female" && d.pclass == 2 && d.survived == 1).length, (d.gender == "female" && d.pclass == 3 && d.survived == 0).length, (d.gender == "female" && d.pclass == 3 && d.survived == 1).length, (d.gender == "male" && d.pclass == 1 && d.survived == 0).length, (d.gender == "male" && d.pclass == 1 && d.survived == 1).length, (d.gender == "male" && d.pclass == 2 && d.survived == 0).length, (d.gender == "male" && d.pclass == 2 && d.survived == 1).length, (d.gender == "male" && d.pclass == 3 && d.survived == 0).length, (d.gender == "male" && d.pclass == 3 && d.survived == 1).length];
+
+                var filter_survived_gender_age = [(d.age > 0 && d.age <= 10 && d.gender == "female" d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.gender == "female" d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.gender == "male" d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.gender == "male" d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.gender == "female" d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.gender == "female" d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.gender == "male" d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.gender == "male" d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.gender == "female" d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.gender == "female" d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.gender == "male" d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.gender == "male" d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.gender == "female" d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.gender == "female" d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.gender == "male" d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.gender == "male" d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.gender == "female" d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.gender == "female" d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.gender == "male" d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.gender == "male" d.survived == 1).length];
+
+                var filter_survived_class_age = [(d.age > 0 && d.age <= 10 && d.pclass == 1 && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 1 && d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 2 && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.pclass == 2 && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.survived == 1).length];
+
+                var filter_gender_class_age = [(d.age > 0 && d.age <= 10 && d.pclass == 1 && d.gender == "female").length, (d.age > 0 && d.age <= 10 && d.pclass == 1 && d.gender == "male").length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.gender == "female").length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.gender == "male").length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.gender == "female").length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.gender == "male").length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.gender == "female").length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.gender == "male").length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.gender == "female").length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.gender == "male").length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.gender == "female").length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.gender == "male").length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.gender == "female").length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.gender == "male").length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.gender == "female").length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.gender == "male").length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.gender == "female").length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.gender == "male").length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.gender == "female").length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.gender == "male").length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.gender == "female").length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.gender == "male").length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.gender == "female").length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.gender == "male").length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.gender == "female").length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.gender == "male").length, (d.age > 40 && d.age <= 100 && d.pclass == 2 && d.gender == "female").length, (d.age > 40 && d.age <= 100 && d.pclass == 2 && d.gender == "male").length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.gender == "female").length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.gender == "female").length];
+
+                var filter_survived_gender_class_age = [(d.age > 0 && d.age <= 10 && d.pclass == 1 && d.gender == "female" && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 1 && d.gender == "female" && d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 1 && d.gender == "male" && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 1 && d.gender == "male" && d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.gender == "female" && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.gender == "female" && d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.gender == "male" && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 2 && d.gender == "male" && d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.gender == "female" && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.gender == "female" && d.survived == 1).length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.gender == "male" && d.survived == 0).length, (d.age > 0 && d.age <= 10 && d.pclass == 3 && d.gender == "male" && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.gender == "female" && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.gender == "female" && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.gender == "male" && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 1 && d.gender == "male" && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.gender == "female" && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.gender == "female" && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.gender == "male" && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 2 && d.gender == "male" && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.gender == "female" && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.gender == "female" && d.survived == 1).length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.gender == "male" && d.survived == 0).length, (d.age > 10 && d.age <= 20 && d.pclass == 3 && d.gender == "male" && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.gender == "female" && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.gender == "female" && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.gender == "male" && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 1 && d.gender == "male" && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.gender == "female" && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.gender == "female" && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.gender == "male" && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 2 && d.gender == "male" && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.gender == "female" && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.gender == "female" && d.survived == 1).length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.gender == "male" && d.survived == 0).length, (d.age > 20 && d.age <= 30 && d.pclass == 3 && d.gender == "male" && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.gender == "female" && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.gender == "female" && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.gender == "male" && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 1 && d.gender == "male" && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.gender == "female" && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.gender == "female" && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.gender == "male" && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 2 && d.gender == "male" && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.gender == "female" && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.gender == "female" && d.survived == 1).length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.gender == "male" && d.survived == 0).length, (d.age > 30 && d.age <= 40 && d.pclass == 3 && d.gender == "male" && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.gender == "female" && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.gender == "female" && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.gender == "male" && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.pclass == 1 && d.gender == "male" && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 2 && d.gender == "female" && d.survived ==0).length, (d.age > 40 && d.age <= 100 && d.pclass == 2 && d.gender == "female" && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 2 && d.gender == "male" && d.survived == 0).length, (d.age > 40 && d.age >= 100 && d.pclass == 2 && d.gender == "male" && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.gender == "female" && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.gender == "female" && d.survived == 1).length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.gender == "male" && d.survived == 0).length, (d.age > 40 && d.age <= 100 && d.pclass == 3 && d.gender == "male" && d.survived == 1).length];
+
+                d3.select("p#filter_survival")
+                  .on("click", function(){
+                    survived = view
+                });
+
+                d3.select("p#filter_gender")
+                  .on("click", function(){
+
+                });
+
+                d3.select("p#filter_class")
+                  .on("click", function(){
+
+                });
+
+                d3.select("p#filter_age")
+                  .on("click", function(){
+
+                });
+
+                var numbers = d3.range(dataset.length);
+                numbers.shift();
+                // numbers.push(numbers.length);
+                // Define an ordinal scale for the x axis.
+                var xScale = d3.scale.ordinal()
+                    .domain(d3.range(dataset.length)) // changed to length of dataset
+                    .rangeRoundBands([0, width], 0.05);
+
+                    .domain(d3.range(dataset.length)) // Changed to length of dataset.
+                    .rangeRoundBands([margin, width], 0.1) ;
+
+                var max_amount= 1300;
+                var y_axis_starting_coordinate = height - (max_amount * bar_magnification) - bar_baseline_y_offset ; // starting coordinate of y-axis
+                var y_axis_ending_coordinate = y_axis_starting_coordinate + (max_rating * bar_magnification) ;
+                // Define an linear scale for the y axis.
+                var yScale = d3.scale.linear()
+                        .domain([max_rating,0]) //Our 5-star scale max and min value
+                        .range([y_axis_starting_coordinate, y_axis_ending_coordinate]) ;
+
+                // Add the bars.
+                d3
+                  .select("svg")
+                  .selectAll("rect")
+          			  .data(dataset)
+          			  .enter()
+          			  .append("rect")
+                  .attr("x", function(d, i) {
+                    return xScale(i);
+          		  // .data(dataset) repeated code- which is right?
+          		  // .enter()
+          		  // .append("rect")
+                //   .attr("x", function ( data, index ) {
+                //     return xScale ( index ) ;
+                //   })
+                  .attr("y", function(d) {
+                    return height - (d.Rating * bar_magnification) - margin-170;
+                  }) //Height minus data value
+                  .attr("width", width / dataset.length - barPadding)
+                  .attr("height", function(d) {return d.Rating * bar_magnification;
+                  .attr("y", function ( data ) {
+                        return height - (data.Rating * bar_magnification) - bar_baseline_y_offset ; // Height minus data value
+                  })
+                  // .attr("class", "bar")
+                  .attr("fill", function (d) {
+                    if(d.City == "Boston" ) {
+                      return "DarkCyan";}
+                    if(d.City == "Cambridge") {
+                      return "Cornflowerblue";}
+                    if(d.City == "Somerville") {
+                      return "Coral";}
+                  .attr("width", xScale.rangeBand())// Use the xScale to dynamically set the width of the bar to width / dataset.length - barPadding. See page 137 in IDVFTW.
+                  .attr("height", function ( data ) {
+                            return data.Rating * bar_magnification ;
+                  })
+
+                    });
+
+
+                // We don't call the built-in scale because the values turn out numeric.
+//                  var xAxis = d3.svg.axis()
+//                      .scale(xScale)
+//                      .orient("bottom");
+
+
+                // Add the labels.
+                var label_bar_gutter = 7 ; // Provides a little distance between the bars and labels, used three lines below.
+                    svg.append("g")
+                      .attr("class", "axis")
+                      .attr("transform", "rotate(-90)")
+//                      .attr("transform", "rotate(90)")
+
+                      //.call(xAxis);
+
+                .selectAll("text")
+                        .data(dataset)
+                        .enter()
+                        .append("text")
+// Help! How do I add a little space between the y axis and bars
+                        .text(function(data) {
+                      .attr("class", "labels")
+                      .attr("transform", "translate("+margin+"," + (y_axis_ending_coordinate+label_bar_gutter) + ") rotate(-90)")
+                      // 1) Move the group of labels right by 20 pixels, then push it down to just below the bar baseline.
+                      // 2) Rotate the group of labels counter-clockwise by 90 degrees
+                      .selectAll("text")
+                      .data(dataset)
+                      .enter()
+                      .append("text")
+                      .text( function ( data ) {
+                            return data.Name;
+                        })
+                        //.attr("text-anchor", "end")
+                        .attr("x", function(d,i) {
+//                            return xScale(i);
+                            return -height+180 ;
+                        })
+                        .attr("y", function(data, i) {
+                                return 22+(i*34);
+//                                return height + (i*30);
+                            // return yScale(i) + yScale.rangeBand() / 2
+                               //     + yScale.rangeBand() / 4;
+                        })
+                        .style ("text-anchor", "end") ;
+//                        .attr("class", "axis")
+                        //.attr("transform", "translate(690,400)") ;
+//                        .attr("transform", "rotate(90)") ;
+}
+});
+
+                      })
+                      .attr("x", function ( data, index ) {
+                            return 0 ;
+                      })
+                      .attr("y", function ( data, index ) {
+                                var spacing_adjustment = 2 ; // Just shave a little off for the line below.
+                                return xScale ( index ) - spacing_adjustment; // This proportionally spaces the labels out so they align nicely with the bars.
+                      })
+                      .style ("text-anchor", "end") ; // Right-align the labels which, when rotated, top-aligns them.
+
+                // Define y axis.
+                var yAxis = d3.svg.axis()
+                        .scale(yScale)
+                        .orient("left")
+                        .ticks(6) ;
+
+                // Draw y axis.
+                svg.append("g")
+                        .attr("class", "axis")
+                        .attr("transform","translate(20)") // Move the axis to the right 20 pixels.
+                        .call(yAxis);
+
+            }
+
+        }};
+
+    </script>
+  </section>
+
+  <section>
+    <article class="filterframe">
+      <p id="filter_survival">Survival</p>
+        <ul>
+          <label><input type="checkbox">survived</label>
+          <label><input type="checkbox">died</label>
+        </ul>
+      <p id="filter_gender">Gender</p>
+        <ul>
+          <label><input type="checkbox">female</label>
+          <label><input type="checkbox">male</label>
+        </ul>
+      <p id="filter_class">Class</p>
+        <ul>
+          <label><input type="checkbox">1st class</label>
+          <label><input type="checkbox">2nd class</label>
+          <label><input type="checkbox">3rd class</label>
+        </ul>
+      <p id="filter_age">Age</p>
+      <ul>
+        <label><input type="checkbox">0 to 10 years</label>
+        <label><input type="checkbox">10 to 20 years</label>
+        <label><input type="checkbox">20 to 30 years</label>
+        <label><input type="checkbox">30 to 40 years</label>
+        <label><input type="checkbox">50 to 100 years</label>
+      </ul>
+    </article>
+  </section>
+
+</body>
+</html>
