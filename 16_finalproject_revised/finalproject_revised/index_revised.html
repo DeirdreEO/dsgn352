@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang=en>
+  <head>
+    <meta charset="utf-8">
+    <title>Titanic visualization_index</title>
+    <link rel="stylesheet" type="text/css" href="reset.css"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Gentium+Book+Basic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Gravitas+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Abril+Fatface' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="finalproject_titanic.css"/>
+    <meta name="data visualization project" content="Titanic passenger list investigation">
+    <script type="text/javascript" src="d3.js"> </script>
+
+</head>
+
+<body>
+
+  <section>
+    <h1 id="site_name">
+      Titanic Data Visualization
+    </h1>
+    <nav class="icons">
+      <a href="#"><img src="icons\icons_01.png" alt="Passenger demographics"></a>
+      <a href="#"><img src="icons\icons_02.png" alt="Journies map"></a>
+      <a href="#"><img src="icons\icons_03.png" alt="Life boat map"></a>
+  </section>
+
+  <section>
+    <p class="caption">First class passengers were roughly 44 percent more likely to survive than other passengers.
+    </p>
+  </section>
+
+<section id="datavis">
+  <script type="text/javascript">
+
+    //global variables
+      var canvas_width = 800;
+      var canvas_height = 500;
+      var bar_baseline_y_offset = 50;
+      var shift_chart = 50;
+      var text_adjust = 10;
+
+      var bar_width = 50;
+      var gender_gap = 3;
+      var class_gap = 60;
+
+      var color_legend = [ ["survived, women", "#e3e600"],
+                          ["died, women", "#feff99"],
+                          ["survived, men", "#212192"],
+                          ["died, men", "#9999ff"]];
+
+    //dataset is defined
+      var dataset;
+
+    //load csv file
+      d3.csv("finalproject_titanic_barchart.csv", function(data) {
+          var dataset = data;
+          console.log(data);
+
+
+    //create canvas svg
+      var svg = d3.select("body")
+                  .append("svg")
+                  .attr("class", "canvas")
+                  .attr("width", canvas_width)
+                  .attr("height", canvas_height);
+
+    //define an ordinal scale for the x-axis
+    var xScale = d3.scale.ordinal()
+        .domain(d3.range(dataset.length)) // changed to length of dataset
+        .rangeRoundBands([0, canvas_width], 0.05);
+
+
+    //define x-axis
+      var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom")
+        .tickValues([]);
+
+    //define y-scale scale functions
+      var max_amount = 450;
+      var y_axis_starting_coordinate = canvas_height - max_amount - bar_baseline_y_offset;
+      var y_axis_ending_coordinate = y_axis_starting_coordinate + max_amount;
+    //define a linear scale for y-axis
+      var yScale = d3.scale.linear()
+        .domain([max_amount, 0])
+        .range([y_axis_starting_coordinate, y_axis_ending_coordinate]);
+
+    //define y-axis
+      var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left")
+        .ticks(5);
+
+    //add the bars
+      svg.selectAll("rect")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("x", function(d, i){
+          if(d.Gender == "female" && d.Class == "first"){return (i * bar_width) + shift_chart;}
+          if(d.Gender == "male" && d. Class == "first"){return (i * bar_width) + shift_chart + gender_gap}
+
+          if(d.Gender == "female" && d.Class == "second"){return (i * bar_width) + shift_chart + gender_gap + class_gap}
+          if(d.Gender == "male" && d.Class == "second"){return (i * bar_width) + shift_chart + (gender_gap * 2) + class_gap}
+
+          if(d.Gender == "female" && d.Class == "third"){return (i * bar_width) + shift_chart + (gender_gap * 2) + (class_gap * 2)}
+          if(d.Gender == "male" && d.Class == "third"){return (i * bar_width) + shift_chart + (gender_gap * 3) + (class_gap * 2)}
+        })
+        .attr("y",function(d){
+          return canvas_height - d.Total - bar_baseline_y_offset
+        })
+        .attr("width",bar_width)
+        .attr("height", function(d){
+          return d.Total
+        })
+        .attr("fill", function(d){
+          if(d.Gender == "female" && d.Survived == "yes"){return "#e3e600";}
+          if(d.Gender == "male" && d.Survived == "yes"){return "#212192";}
+          if(d.Gender == "female" && d.Survived == "no"){return "#feff99";}
+          if(d.Gender == "male" && d.Survived == "no"){return "#9999ff";}
+        })
+        .on("mouseover", function(){
+          d3.select(this)
+            .transition()
+            .duration(250)
+            .attr("fill", "orange")
+        })
+        .on("mouseout", function(d){
+          d3.select(this)
+          .attr("fill", function(d){
+            if(d.Gender == "female" && d.Survived == "yes"){return "#e3e600";}
+            if(d.Gender == "male" && d.Survived == "yes"){return "#212192";}
+            if(d.Gender == "female" && d.Survived == "no"){return "#feff99";}
+            if(d.Gender == "male" && d.Survived == "no"){return "#9999ff";}
+        })
+        })
+        .on("mouseover", function(d) {
+
+         //Get this bar's x/y values, then augment for the tooltip
+         var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
+         var yPosition = parseFloat(d3.select(this).attr("y")) + 14;
+
+         //Create the tooltip label
+         svg.append("text")
+            .attr("id", "tooltip")
+            .attr("x", xPosition)
+            .attr("y", yPosition)
+            .attr("text-anchor", "middle")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "11px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black")
+            .text(d.Total);
+
+        })
+        .on("mouseout", function() {
+
+         //Remove the tooltip
+         d3.select("#tooltip").remove();
+
+        })
+      ;
+
+      //draw y-axis
+        var Y_axis_elements = svg.append("g")
+              .attr("class", "axis")
+              .attr("transform","translate(50)") // Move the axis to the right 20 pixels.
+              .call(yAxis);
+
+      //draw x-axis
+        var X_axis_elements = svg.append("g")
+              .attr("class", "axis")
+              .attr("transform", "translate(" + shift_chart + ", " + y_axis_ending_coordinate + ")")
+              .call(xAxis);
+
+              // add a title for the chart
+                svg.append ("text")
+                            .attr("id", "titlesvg")
+                            .attr("x", canvas_width/ 2)
+                            .attr("y", 25)
+                            .attr("dx", "10px")
+                            .attr("dy", ".75em")
+                            .attr("text-anchor", "middle")
+                            .attr("text-decoration", "underline") // Consider using a CSS class instead of so many inline styles / attributes
+                            .attr("class", "shadow")
+                            .text("Passenger Survival by Class and Sex");
+
+              //add first class label
+                svg.append ("text")
+                          // .attr("fill", "DarkCyan")
+                          .attr("x", shift_chart + (bar_width * 2))
+                          .attr("y", canvas_height - bar_baseline_y_offset + text_adjust)
+                          .attr("dx", "10px")
+                          .attr("dy", ".75em")
+                          .attr("text-anchor", "middle")
+                          .attr("class", "shadow")
+                          .text("First Class");
+
+              //add second class label
+                svg.append ("text")
+                        // .attr("fill", "DarkCyan")
+                        .attr("x", shift_chart + (bar_width * 6) + gender_gap + class_gap)
+                        .attr("y", canvas_height - bar_baseline_y_offset + text_adjust)
+                        .attr("dx", "10px")
+                        .attr("dy", ".75em")
+                        .attr("text-anchor", "middle")
+                        .attr("class", "shadow")
+                        .text("Second Class");
+
+              //add third class label
+                svg.append ("text")
+                      // .attr("fill", "DarkCyan")
+                      .attr("x", shift_chart + (bar_width * 10) + (gender_gap * 2) + (class_gap * 2))
+                      .attr("y", canvas_height - bar_baseline_y_offset + text_adjust)
+                      .attr("dx", "10px")
+                      .attr("dy", ".75em")
+                      .attr("text-anchor", "middle")
+                      .attr("class", "shadow")
+                      .text("Third Class");
+
+                      //legend is added
+                      var legend = svg.append("g")
+                        .attr("class", "legend")
+                        //.attr("x", w - 65)
+                        //.attr("y", 50)
+                        .attr("height", 100)
+                        .attr("width", 100)
+                        .attr('transform', 'translate(-20,50)');
+
+                      var legendRect = legend.selectAll('rect').data(color_legend);
+
+                      legendRect.enter()
+                        .append("rect")
+                        .attr("x", canvas_width - 200)
+                        .attr("width", 10)
+                        .attr("height", 10);
+
+                      legendRect
+                        .attr("y", function(d, i) {
+                          return i * 20;
+                        })
+                        .style("fill", function(d) {
+                          return d[1];
+                        });
+
+                        var legendText = legend.selectAll('text').data(color_legend);
+
+                        legendText.enter()
+                          .append("text")
+                          .attr("x", canvas_width - 200 + 15);
+
+                        legendText
+                          .attr("y", function(d, i) {
+                            return i * 20 + 9;
+                          })
+                          .attr("fill", "#212192")
+                          .text(function(d) {
+                            return d[0];
+                          });
+
+});
+
+  </script>
+</section>
+
+</body>
+
+</html>

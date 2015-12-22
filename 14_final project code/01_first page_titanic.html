@@ -16,6 +16,7 @@
   	<meta name="data visualization project" content="Titanic passenger list investigation">
     <script type="text/javascript" src="d3.js"> </script>
 </head>
+
 <body>
   <section>
     <header>
@@ -65,13 +66,10 @@
             .attr("y", 25)
             .attr("dx", "10px")
             .attr("dy", ".75em")
-//            .attr("dx", "10px")
-//            .attr("dy", ".75em") // What are these for? The above two lines already position the element in the horizontal center, and if it needs to by moved down, the y attribute can be increased.
             .attr("text-anchor", "middle")
-            .style("text-decoration", "underline")
             .attr("text-decoration", "underline") // Consider using a CSS class instead of so many inline styles / attributes
             .attr("class", "shadow")
-            .text("Boston Bar Yelp Ratings Chart");
+            .text("Passengers");
 
 //@@ -75,142 +68,93 @@ //what does this meeeeean?
 
@@ -197,7 +195,7 @@ d3.csv ( "titanic3_workingfile2.csv", function ( error, data ) {
                     return height - (d.Rating * bar_magnification) - margin-170;
                   }) //Height minus data value
                   .attr("width", width / dataset.length - barPadding)
-                  .attr("height", function(d) {return d.Rating * bar_magnification;
+                  .attr("height", function(d) {return d.Rating * bar_magnification};
                   .attr("y", function ( data ) {
                         return height - (data.Rating * bar_magnification) - bar_baseline_y_offset ; // Height minus data value
                   })
@@ -208,7 +206,7 @@ d3.csv ( "titanic3_workingfile2.csv", function ( error, data ) {
                     if(d.City == "Cambridge") {
                       return "Cornflowerblue";}
                     if(d.City == "Somerville") {
-                      return "Coral";}
+                      return "Coral";})
                   .attr("width", xScale.rangeBand())// Use the xScale to dynamically set the width of the bar to width / dataset.length - barPadding. See page 137 in IDVFTW.
                   .attr("height", function ( data ) {
                             return data.Rating * bar_magnification ;
